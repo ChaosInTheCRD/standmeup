@@ -24,6 +24,7 @@ def get_json_filename():
     return standup_json
 
 def write_standup_file(standup, output_file):
+    output_file.truncate(0)
     day = f"{date.today().strftime('%A')}:\n"
     output_file.write(day)
     for item in range(len(standup)):
@@ -31,17 +32,17 @@ def write_standup_file(standup, output_file):
         activity = standup[item]['activity']
         entry = f"- [{duration}] {activity} \n"
         output_file.write(entry)
-
-def main(standup_json, output_file):
-    standup = load_json(standup_json)
-    output_file = open(os.path.join(sys.path[0], 'output.txt'), 'a+')
-    output_file.truncate(0)
-    write_standup_file(standup, output_file)
-    output_file.close()
-    output_file = open(os.path.join(sys.path[0], 'output.txt'), 'a+')
     output_file.seek(0)
     print(output_file.read())
-    
+
+def main(standup_json, output_file):
+    # Get the files
+    standup = load_json(standup_json)
+    output_file = open(os.path.join(sys.path[0], 'output.txt'), 'a+')
+
+    # Build the standup
+    write_standup_file(standup, output_file)
+    output_file.close()
 
 
 if __name__ == "__main__":
