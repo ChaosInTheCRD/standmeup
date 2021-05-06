@@ -3,6 +3,6 @@ Anyone who knows me, knows that I am terrible at doing my standup. Well, no long
 
 **Top Tip ⏰: Still set an alarm for the end of the day, to make sure you actually carry out these steps 😂**
 
-1. run `python python3 standup_gen.py`
+1. run `python3 standup_gen.py`
 2. Paste into Slack
 3. Stop worrying, you're now a standup ninja 🥷
