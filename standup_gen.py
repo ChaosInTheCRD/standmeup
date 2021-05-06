@@ -1,5 +1,6 @@
 import argparse
 import os
+import subprocess
 import json
 import sys
 import datetime
@@ -16,12 +17,14 @@ def load_json(jsonfile):
     except IOError:
         raise IOError(f"{jsonfile} does not exist. Please export it from the 'Daily' app.")
 
-def get_json_filename():
+def get_daily_json():
     today = date.today()
-    today = date.strftime(today, '%d:%m:%Y')
-    standup_json = f"Daily\ Export\ \({today}\ -\ {today}\).json"
-    standup_json = standup_json.replace('\\', '')
-    return standup_json
+    today = date.strftime(today, '%d-%m-%Y')
+    cmd = "osascript applescript"
+    file = f"daily-jsons/standup-{today}.json"
+    os.mkdir("daily-jsons")
+    os.system(f"osascript applescript > {file}")
+    return file
 
 def write_standup_file(standup, output_file):
     output_file.truncate(0)
@@ -36,8 +39,10 @@ def write_standup_file(standup, output_file):
     print(output_file.read())
 
 def main(standup_json, output_file):
+
+    file = get_daily_json()
     # Get the files
-    standup = load_json(standup_json)
+    standup = load_json(file)
     output_file = open(os.path.join(sys.path[0], 'output.txt'), 'a+')
 
     # Build the standup
@@ -48,7 +53,7 @@ def main(standup_json, output_file):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Generates my standups file from json export from "Daily" app')
-    parser.add_argument('--standup', '-c', required=False, default=get_json_filename(),
+    parser.add_argument('--standup', '-c', required=False, default="hello",
                         help='The location of the Platform Components YAML file')
     parser.add_argument('--output', '-o', required=False, default='output.txt',
                         help='The desired output location of the generated YAML manifest')
