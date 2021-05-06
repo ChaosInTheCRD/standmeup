@@ -21,8 +21,9 @@ def get_daily_json():
     today = date.today()
     today = date.strftime(today, '%d-%m-%Y')
     cmd = "osascript applescript"
-    file = f"daily-jsons/standup-{today}.json"
-    os.mkdir("daily-jsons")
+    file = f"daily_jsons/standup-{today}.json"
+    if not os.path.exists('daily_jsons'):
+        os.mkdir("daily_jsons")
     os.system(f"osascript applescript > {file}")
     return file
 
