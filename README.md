@@ -3,8 +3,9 @@ Anyone who knows me, knows that I am terrible at doing my standup. Well, no long
 
 **Top Tip ⏰: Still set an alarm for the end of the day, to make sure you actually carry out these steps 😂**
 
-**Extra Tip: I just have this set as a bash alias `alias standmeup="python3 ${HOME}/Documents/standup-gen/standmeup.py"`**
+**Extra Tip: I just have this set as a bash alias `alias standmeup="python3 ${HOME}/standmeup/standmeup.py"`**
 
-1. run `python3 standup_gen.py`
-2. Paste into Slack
-3. Stop worrying, you're now a standup ninja 🥷
+1. Install Python3
+2. run `python3 standup_gen.py`
+3. Paste into Slack
+4. Stop worrying, you're now a standup ninja 🥷
