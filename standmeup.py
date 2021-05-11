@@ -47,10 +47,11 @@ def write_standup_file(standup, output_file):
 
     # Iterates over the JSON items, and adds each as an entry for the standup
     for item in range(len(standup)):
-        duration = round(standup[item]['duration'], 2)
-        activity = standup[item]['activity']
-        entry = f"- [{duration}] {activity} \n"
-        output_file.write(entry)
+        if (standup[item]['activity']).lower() not in ["break", "lunch"]:
+            duration = round(standup[item]['duration'], 2)
+            activity = standup[item]['activity']
+            entry = f"- [{duration}] {activity} \n"
+            output_file.write(entry)
 
     # Goes back to the first line of the file for printing, and prints
     output_file.seek(0)
