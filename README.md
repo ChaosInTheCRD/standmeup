@@ -6,6 +6,6 @@ Anyone who knows me, knows that I am terrible at doing my standup. Well, no long
 **Extra Tip: I just have this set as a bash alias `alias standmeup="python3 ${HOME}/standmeup/standmeup.py"`**
 
 1. Install Python3
-2. run `python3 standup_gen.py`
+2. run `python3 standmeup.py`
 3. Paste into Slack
 4. Stop worrying, you're now a standup ninja 🥷
