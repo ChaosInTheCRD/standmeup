@@ -1,9 +1,13 @@
-tell application "Finder" to set current_path to (POSIX path of (container of (path to me) as alias))
+on run argv
 
-tell application "Daily"
+	tell application "Finder" to set current_path to (POSIX path of (container of (path to me) as alias))
 
-set Today to (current date)
+	tell application "Daily"
 
-print json with report "summary" from Today to Today with duration format "hours" with time rounding
+	set Today to (current date) - (item 1 of argv * days)
 
-end tell
+	print json with report "summary" from Today to Today with duration format "hours" with time rounding
+
+	end tell
+
+end run

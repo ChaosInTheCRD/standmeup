@@ -4,7 +4,9 @@ import subprocess
 import json
 import sys
 import datetime
+import calendar
 from datetime import date
+from datetime import datetime, timedelta
 
 def load_json(jsonfile):
     """Read the "Daily" app json export file."""
@@ -17,11 +19,23 @@ def load_json(jsonfile):
     except IOError:
         raise IOError(f"{jsonfile} does not exist. Please export it from the 'Daily' app.")
 
+def sort_day(day):
+
+    daynames = [n.lower() for n in calendar.day_name]
+    today = daynames[datetime.today().weekday()]
+
+    if day.lower() != today:
+	    days_removed = 7 - (daynames.index(day.lower()) - daynames.index(today.lower()))
+    else:
+        days_removed = 0
+
+    newdate = datetime.today() - timedelta(days_removed)
+    return newdate, days_removed
+
 # Fetches the json from the Daily App, and saves it in a directory
-def get_daily_json():
+def get_daily_json(sorted_date, days_removed):
     # Need to get the date for dumping the daily json file
-    today = date.today()
-    today = date.strftime(today, '%d-%m-%Y')
+    today = date.strftime(sorted_date, '%d-%m-%Y')
 
     # This gets the path of the script and creates the name of the file to be dumped
     filepath = os.path.realpath(__file__)
@@ -32,15 +46,15 @@ def get_daily_json():
         os.mkdir(f"{os.path.dirname(filepath)}/daily_jsons")
 
     # this executes an `applescript` to get the json data from the Daily App https://dailytimetracking.com/support?utm_source=app#faq-applescript-export
-    os.system(f"osascript {os.path.dirname(filepath)}/applescript > {file}")
+    os.system(f"osascript {os.path.dirname(filepath)}/applescript {days_removed} > {file}")
     return file
 
-def write_standup_file(standup, output_file):
+def write_standup_file(standup, sorted_date, output_file):
     # This wipes the output file if it has data in it already
     output_file.truncate(0)
 
     # Gets the current day
-    day = f"{date.today().strftime('%A')}:\n"
+    day = f"{date.strftime(sorted_date, '%A')}:\n"
 
     # Adds the day to the top
     output_file.write(day)
@@ -57,15 +71,16 @@ def write_standup_file(standup, output_file):
     output_file.seek(0)
     print(output_file.read())
 
-def main(output_file):
+def main(output_file, day):
 
+    sorted_date, days_removed = sort_day(day)
     # Get the files
-    file = get_daily_json()
+    file = get_daily_json(sorted_date, days_removed)
     standup = load_json(file)
     output_file = open(os.path.join(sys.path[0], 'output.txt'), 'a+')
 
     # Build and output the standup
-    write_standup_file(standup, output_file)
+    write_standup_file(standup, sorted_date, output_file)
     output_file.close()
 
 
@@ -74,5 +89,7 @@ if __name__ == "__main__":
         description='Generates my standups file from json export from "Daily" app')
     parser.add_argument('--output', '-o', required=False, default='output.txt',
                         help='The desired output location of the generated YAML manifest')
+    parser.add_argument('--day', '-d', required=False, default='today',
+                        help='The day that you wish to create a standup for')
     args = parser.parse_args()
-    main(args.output)
+    main(args.output, args.day)
