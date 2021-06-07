@@ -89,7 +89,7 @@ if __name__ == "__main__":
         description='Generates my standups file from json export from "Daily" app')
     parser.add_argument('--output', '-o', required=False, default='output.txt',
                         help='The desired output location of the generated YAML manifest')
-    parser.add_argument('--day', '-d', required=False, default='today',
+    parser.add_argument('--day', '-d', required=False, default=f"{date.today().strftime('%A')}",
                         help='The day that you wish to create a standup for')
     args = parser.parse_args()
     main(args.output, args.day)
