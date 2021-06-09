@@ -22,14 +22,21 @@ def load_json(jsonfile):
 def sort_day(day):
 
     daynames = [n.lower() for n in calendar.day_name]
-    today = daynames[datetime.today().weekday()]
+    day_index = daynames.index(day.lower())
+    today_index = datetime.today().weekday()
 
-    if day.lower() != today:
-	    days_removed = 7 - (daynames.index(day.lower()) - daynames.index(today.lower()))
+    print(f"{today_index} has an int of {day_index}")
+
+    if today_index > day_index:
+	    days_removed = today_index - day_index
+    elif today_index < day_index:
+        days_removed = today_index + (7-day_index)
     else:
-        days_removed = 0
+        days_removed = 7
 
+    print(f"days removed is {days_removed}")
     newdate = datetime.today() - timedelta(days_removed)
+    print(f"new date is {newdate}")
     return newdate, days_removed
 
 # Fetches the json from the Daily App, and saves it in a directory
