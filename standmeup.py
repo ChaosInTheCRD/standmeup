@@ -25,7 +25,6 @@ def sort_day(day):
     day_index = daynames.index(day.lower())
     today_index = datetime.today().weekday()
 
-    print(f"{today_index} has an int of {day_index}")
 
     if today_index > day_index:
 	    days_removed = today_index - day_index
@@ -34,9 +33,7 @@ def sort_day(day):
     else:
         days_removed = 7
 
-    print(f"days removed is {days_removed}")
     newdate = datetime.today() - timedelta(days_removed)
-    print(f"new date is {newdate}")
     return newdate, days_removed
 
 # Fetches the json from the Daily App, and saves it in a directory
